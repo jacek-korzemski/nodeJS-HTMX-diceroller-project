@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors')
 const path = require('path');
+const WebSocket = require('ws');
+const { WebSocketServer } = require('ws')
 
 const port = process.env.PORT || 3001;
 
@@ -11,7 +13,6 @@ server.use(express.static(path.join(__dirname, 'htmx')));
 
 const webserver = server.listen(port, () => console.log(`Listening on ${port}`));
 
-const { WebSocketServer } = require('ws')
 const sockserver = new WebSocketServer({ server: webserver });
 
 sockserver.on('connection', ws => {
