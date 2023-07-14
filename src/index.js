@@ -3,7 +3,7 @@ const cors = require('cors')
 const path = require('path');
 
 const port = process.env.PORT || 3001;
-const ws_port = process.env.WSPORT || 8080;
+const ws_port = process.env.WSPORT || 443;
 
 const webserver = express();
 webserver.use(cors());
