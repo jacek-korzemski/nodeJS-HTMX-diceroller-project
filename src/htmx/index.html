@@ -4,37 +4,42 @@
   <title>
     DiceRoler
   </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
 </head>
 
 <body>
-  <main>
-    <div class="box content">
-      <h1>Dice Roller</h1>
+  <main class="container">
+    <h1>Dice Roller</h1>
 
-      <div hx-ext="ws" ws-connect="ws://127.0.0.1:8080/">
-        <form id="form" ws-send>
-          <label for="player-name">Player Name:</label>
-          <input type="text" id="player-name" name="player_name" required>
+    <div class="form-wrapper" hx-ext="ws" ws-connect="ws://127.0.0.1:8080/">
+      <form id="form" ws-send>
+        <label for="player-name">Player Name:</label>
+        <input type="text" id="player-name" name="player_name" required>
 
-          <label for="dice">Select a Dice:</label>
-          <select id="dice" name="dice" required>
-            <option value="D4">D4</option>
-            <option value="D6">D6</option>
-            <option value="D8">D8</option>
-            <option value="D10">D10</option>
-            <option value="D12">D12</option>
-            <option value="D20">D20</option>
-            <option value="D100">D100</option>
-          </select><br><br>
+        <label for="dice">Select a Dice:</label>
+        <select id="dice" name="dice" required>
+          <option value="D4">D4</option>
+          <option value="D6">D6</option>
+          <option value="D8">D8</option>
+          <option value="D10">D10</option>
+          <option value="D12">D12</option>
+          <option value="D20">D20</option>
+          <option value="D100">D100</option>
+        </select><br><br>
 
-          <button type="submit">Roll Dice</button>
-        </form>
-      </div>
-      <div class="box" id="result"></div>
+        <button type="submit">Roll Dice</button>
+      </form>
     </div>
+    <table id="result" class="box">
+      <tr>
+        <td>Player:</td>
+        <td>Dice:</td>
+        <td>Result:</td>
+      </tr>
+    </table>
   </main>
 
   <script>
@@ -51,9 +56,15 @@
     })
 
     document.addEventListener("htmx:wsAfterMessage", (event) => {
-      const result = JSON.parse(event.detail.message);
+      const result = JSON.parse(event.detail.message) || null;
       const resultContainer = document.getElementById("result");
-      resultContainer.innerHTML += JSON.stringify(result) + '<br/>';
+      resultContainer.innerHTML += `
+        <tr>
+          <td>${result.player_name}</td>
+          <td>${result.dice}</td>
+          <td>${result.roll_result}</td>
+        </tr>
+      `;
     })
   </script>
 </body>
