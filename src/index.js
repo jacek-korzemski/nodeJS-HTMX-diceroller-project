@@ -27,7 +27,11 @@ sockserver.on('connection', ws => {
 
     console.log(response);
 
-    ws.send(response);
+    sockserver.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(response);
+      }
+    });
   });
   ws.onerror = function () {
     console.log('websocket error')
