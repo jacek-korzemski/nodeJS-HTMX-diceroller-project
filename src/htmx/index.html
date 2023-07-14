@@ -1,0 +1,61 @@
+<html>
+
+<head>
+  <title>
+    DiceRoler
+  </title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+</head>
+
+<body>
+  <main>
+    <div class="box content">
+      <h1>Dice Roller</h1>
+
+      <div hx-ext="ws" ws-connect="ws://127.0.0.1:8080/">
+        <form id="form" ws-send>
+          <label for="player-name">Player Name:</label>
+          <input type="text" id="player-name" name="player_name" required>
+
+          <label for="dice">Select a Dice:</label>
+          <select id="dice" name="dice" required>
+            <option value="D4">D4</option>
+            <option value="D6">D6</option>
+            <option value="D8">D8</option>
+            <option value="D10">D10</option>
+            <option value="D12">D12</option>
+            <option value="D20">D20</option>
+            <option value="D100">D100</option>
+          </select><br><br>
+
+          <button type="submit">Roll Dice</button>
+        </form>
+      </div>
+      <div class="box" id="result"></div>
+    </div>
+  </main>
+
+  <script>
+    htmx.config.wsReconnectDelay = function (retryCount) {
+      return retryCount * 6000 // return value in milliseconds
+    }
+
+    document.addEventListener("htmx:wsConnecting", () => {
+      console.log('Connecting to websocket...');
+    })
+
+    document.addEventListener("htmx:wsOpen", () => {
+      console.log('Connected!');
+    })
+
+    document.addEventListener("htmx:wsAfterMessage", (event) => {
+      const result = JSON.parse(event.detail.message);
+      const resultContainer = document.getElementById("result");
+      resultContainer.innerHTML += JSON.stringify(result) + '<br/>';
+    })
+  </script>
+</body>
+
+</html>
