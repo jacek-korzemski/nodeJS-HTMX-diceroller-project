@@ -1,14 +1,19 @@
 const express = require('express');
+const cors = require('cors')
 const path = require('path');
 
+const port = process.env.PORT || 3001;
+const ws_port = process.env.WSPORT || 8080;
+
 const webserver = express();
+webserver.use(cors());
 
 webserver.use(express.static(path.join(__dirname, 'htmx')));
 
-webserver.listen(3000, () => console.log(`Listening on ${3000}`));
+webserver.listen(port, () => console.log(`Listening on ${port}`));
 
 const { WebSocketServer } = require('ws')
-const sockserver = new WebSocketServer({ port: 8080 })
+const sockserver = new WebSocketServer({ port: ws_port })
 
 sockserver.on('connection', ws => {
   console.log('New client connected!')

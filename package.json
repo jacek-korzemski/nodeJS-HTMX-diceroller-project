@@ -4,7 +4,8 @@
   "description": "simple backend app for rolling the dice",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "author": "Jacek Korzemski and Chat GPT",
   "license": "ISC",
