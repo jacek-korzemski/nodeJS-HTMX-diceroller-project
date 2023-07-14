@@ -58,13 +58,22 @@
     document.addEventListener("htmx:wsAfterMessage", (event) => {
       const result = JSON.parse(event.detail.message) || null;
       const resultContainer = document.getElementById("result");
-      resultContainer.innerHTML += `
-        <tr>
-          <td>${result.player_name}</td>
-          <td>${result.dice}</td>
-          <td>${result.roll_result}</td>
-        </tr>
-      `;
+
+      const row = document.createElement("tr");
+
+      const playerNameCell = document.createElement("td");
+      const diceCell = document.createElement("td");
+      const rollResultCell = document.createElement("td");
+
+      playerNameCell.textContent = result.player_name;
+      diceCell.textContent = result.dice;
+      rollResultCell.textContent = result.roll_result;
+
+      row.appendChild(playerNameCell);
+      row.appendChild(diceCell);
+      row.appendChild(rollResultCell);
+
+      resultContainer.appendChild(row);
     })
   </script>
 </body>
