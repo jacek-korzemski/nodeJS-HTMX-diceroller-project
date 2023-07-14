@@ -13,8 +13,8 @@
 <body>
   <main class="container">
     <h1>Dice Roller</h1>
-
-    <div class="form-wrapper" hx-ext="ws" ws-connect="wss://diceroller-2.onrender.com">
+    <!-- wss://diceroller-2.onrender.com -->
+    <div class="form-wrapper" hx-ext="ws" ws-connect="<%= env.APP_URL %>">
       <form id="form" ws-send>
         <label for="player-name">Player Name:</label>
         <input type="text" id="player-name" name="player_name" required>
@@ -32,12 +32,17 @@
 
         <button type="submit">Roll Dice</button>
       </form>
-      <table id="result" class="box">
-        <tr>
-          <td>Player:</td>
-          <td>Dice:</td>
-          <td>Result:</td>
-        </tr>
+      <table class="box">
+        <thead>
+          <tr>
+            <td>Player:</td>
+            <td>Dice:</td>
+            <td>Result:</td>
+          </tr>
+        </thead>
+        <tbody id="result">
+
+        </tbody>
       </table>
     </div>
   </main>
@@ -56,7 +61,8 @@
     })
 
     document.addEventListener("htmx:wsAfterMessage", (event) => {
-      const result = JSON.parse(event.detail.message) || null;
+      const result = JSON?.parse?.(event.detail.message) || null;
+      if (!result) return;
       const resultContainer = document.getElementById("result");
 
       const row = document.createElement("tr");
@@ -73,7 +79,11 @@
       row.appendChild(diceCell);
       row.appendChild(rollResultCell);
 
-      resultContainer.appendChild(row);
+      if (resultContainer.firstChild) {
+        resultContainer.insertBefore(row, resultContainer.firstChild);
+      } else {
+        resultContainer.appendChild(row);
+      }
     })
   </script>
 </body>

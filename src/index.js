@@ -3,13 +3,26 @@ const cors = require('cors')
 const path = require('path');
 const WebSocket = require('ws');
 const { WebSocketServer } = require('ws')
+require('dotenv').config();
+require('ejs');
 
 const port = process.env.PORT || 3001;
 
 const server = express();
 server.use(cors());
 
+server.set('view engine', 'ejs');
+server.set('views', path.join(__dirname, 'htmx'));
+
 server.use(express.static(path.join(__dirname, 'htmx')));
+
+server.get('/', (req, res) => {
+  const environmentVariables = {
+    APP_URL: process.env.APP_URL,
+  };
+
+  res.render('index', { env: environmentVariables });
+});
 
 const webserver = server.listen(port, () => console.log(`Listening on ${port}`));
 
