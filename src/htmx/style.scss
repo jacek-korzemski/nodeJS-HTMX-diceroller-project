@@ -29,7 +29,7 @@ main {
   }
 
   .form-wrapper {
-    width: fit-content;
+    width: 100%;
     margin: 0 auto;
     input, select {
       width: 100%;
@@ -47,5 +47,5 @@ table {
 }
 
 .container {
-  max-width: 420px; 
+  max-width: 360px; 
 }
